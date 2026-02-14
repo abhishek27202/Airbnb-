@@ -5,6 +5,7 @@ import com.codingshuttle.airbnb.airbnb.entity.Hotel;
 import com.codingshuttle.airbnb.airbnb.entity.Room;
 import com.codingshuttle.airbnb.airbnb.exception.ResourceNotFoundException;
 import com.codingshuttle.airbnb.airbnb.repository.HotelRepository;
+import com.codingshuttle.airbnb.airbnb.repository.RoomRepository;
 import com.codingshuttle.airbnb.airbnb.service.HotelService;
 
 import com.codingshuttle.airbnb.airbnb.service.InventoryService;
@@ -22,7 +23,7 @@ public class HotelServiceImpl implements HotelService {
     private  final HotelRepository hotelRepository;
     private final ModelMapper modelMapper;
     private final InventoryService inventoryService;
-
+    private final RoomRepository roomRepository;
     @Override
     public HotelDto createNewHotel(HotelDto hotelDto) {
         log.info("Creating a hotel with name: {}", hotelDto.getName());
@@ -56,10 +57,12 @@ public class HotelServiceImpl implements HotelService {
     public void deleteById(Long id) {
         Hotel hotel=hotelRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with ID:"+id));
-        hotelRepository.deleteById(id);
+       // hotelRepository.deleteById(id);
         for(Room room:hotel.getRooms()){
             inventoryService.deleteFutureInventory(room);
+            roomRepository.findById(room.getId());
         }
+        hotelRepository.deleteById(id);
     }
 
     @Override
