@@ -24,6 +24,7 @@ public class HotelServiceImpl implements HotelService {
     private final ModelMapper modelMapper;
     private final InventoryService inventoryService;
     private final RoomRepository roomRepository;
+
     @Override
     public HotelDto createNewHotel(HotelDto hotelDto) {
         log.info("Creating a hotel with name: {}", hotelDto.getName());
