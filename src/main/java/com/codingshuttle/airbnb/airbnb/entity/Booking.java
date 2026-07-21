@@ -2,16 +2,23 @@ package com.codingshuttle.airbnb.airbnb.entity;
 
 import com.codingshuttle.airbnb.airbnb.entity.enums.BookingStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name="bookings")
 public class Booking {
     @Id
@@ -40,14 +47,16 @@ public class Booking {
     @Column(nullable = false)
     private LocalDate checkOutDate;
 
+    @Column(nullable = false)
+    private BigDecimal amount;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToOne(fetch=FetchType.LAZY)
-    private Payment payment;
+
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

@@ -23,4 +23,7 @@ public class Payment {
 
     @Column(nullable = false)
     private BigDecimal amount;
+
+    @OneToOne(fetch=FetchType.LAZY)
+    private Booking booking;
 }

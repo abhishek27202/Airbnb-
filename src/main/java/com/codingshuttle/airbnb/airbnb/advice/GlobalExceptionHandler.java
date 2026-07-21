@@ -3,6 +3,7 @@ package com.codingshuttle.airbnb.airbnb.advice;
 import com.codingshuttle.airbnb.airbnb.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -14,6 +15,17 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .message(exception.getMessage())
                 .build();
+        return buildErrorResponseEntity(apiError);
+    }
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ApiResponse<?>> handleMethodNotSupported(
+            HttpRequestMethodNotSupportedException exception) {
+
+        ApiError apiError = ApiError.builder()
+                .status(HttpStatus.METHOD_NOT_ALLOWED)
+                .message(exception.getMessage())
+                .build();
+
         return buildErrorResponseEntity(apiError);
     }
 

@@ -53,12 +53,23 @@ public class InventoryServiceImpl implements InventoryService {
         inventoryRepository.deleteByDateAfterAndRoom(today,room);
     }
 
+//    @Override
+//    public Page<HotelDto> searchHotel(HotelSearchRequest hotelSearchRequest) {
+//        Pageable pageable= PageRequest.of(hotelSearchRequest.getPage(), hotelSearchRequest.getSize());
+//        Long dateCount= ChronoUnit.DAYS.between(hotelSearchRequest.getStartDate(),hotelSearchRequest.getEndDate())+1;
+//   Page<Hotel> hotelPage= inventoryRepository.findHotelWithAvailableInventory(hotelSearchRequest.getCity(),hotelSearchRequest.getStartDate(),
+//                hotelSearchRequest.getEndDate(),hotelSearchRequest.getRoomCount(),dateCount,pageable);
+//   return hotelPage.map((element)->modelMapper.map(element,HotelDto.class));
+//    }
+
     @Override
     public Page<HotelDto> searchHotel(HotelSearchRequest hotelSearchRequest) {
-        Pageable pageable= PageRequest.of(hotelSearchRequest.getPage(), hotelSearchRequest.getSize());
-        Long dateCount= ChronoUnit.DAYS.between(hotelSearchRequest.getStartDate(),hotelSearchRequest.getEndDate())+1;
-   Page<Hotel> hotelPage= inventoryRepository.findHotelWithAvailableInventory(hotelSearchRequest.getCity(),hotelSearchRequest.getStartDate(),
-                hotelSearchRequest.getEndDate(),hotelSearchRequest.getRoomCount(),dateCount,pageable);
-   return hotelPage.map((element)->modelMapper.map(element,HotelDto.class));
+        log.info("Searching hotels for {} city, from {} to {}", hotelSearchRequest.getCity(), hotelSearchRequest.getStartDate(), hotelSearchRequest.getEndDate());
+        Pageable pageable = PageRequest.of(hotelSearchRequest.getPage(), hotelSearchRequest.getSize());
+        long dateCount = ChronoUnit.DAYS.between(hotelSearchRequest.getStartDate(), hotelSearchRequest.getEndDate()) + 1;
+        Page<Hotel> hotelPage = inventoryRepository.findHotelWithAvailableInventory(hotelSearchRequest.getCity(),
+                hotelSearchRequest.getStartDate(), hotelSearchRequest.getEndDate(), hotelSearchRequest.getRoomCount(),
+                dateCount, pageable);
+        return hotelPage.map((element) -> modelMapper.map(element, HotelDto.class));
     }
 }
